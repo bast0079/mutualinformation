@@ -11,10 +11,13 @@ public class Main {
         ArrayList<String> names = new ArrayList<>();
         names.add("Steve Bastin");
         names.add("Richard Banasiak");
-        names.add( "Kenton Watson");
+        names.add("Kenton Watson");
         names.add("Steve Johnson");
         names.add("Theo Kanning");
         names.add("Joe Rider");
+        names.add("Patrick Fuentes");
+        names.add("Jeff Huston");
+        names.add("Jayd Saucedo");
         names.add("Steve Barton");
         names.add("Stephen Hopper");
         names.add("Stevie Bastin");
@@ -44,7 +47,7 @@ public class Main {
 
         for (String s : searchables) {
             double mutual = mutualInformation(searchTerm, s);
-            if(mutual < .30) {
+            if(mutual < .50) {
                 matches.put(s, mutual);
             }
         }
@@ -77,7 +80,7 @@ public class Main {
         return sortedMap;
     }
 
-    
+
     /**
      * This method takes in a single Searchable's searchable String and calculates the entropy of said string
      * using the Shannon definition for average information.
