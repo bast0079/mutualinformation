@@ -32,26 +32,52 @@ public class Main {
 
         }
 
-       String[] best = bestMatches(searchTerm, names);
+       List<String> best = bestMatches(searchTerm, names);
         System.out.println("The best match(es): ");
-        for(String s : best) {
+        for(String s : best ) {
             System.out.println(s);
         }
     }
 
-    public static String[] bestMatches(String searchTerm, List<String> searchables) {
-       TreeMap<String, Double> sortedMatches = new TreeMap<>();
+    public static List<String> bestMatches(String searchTerm, List<String> searchables) {
+       HashMap<String, Double> matches = new HashMap<>();
 
         for (String s : searchables) {
             double mutual = mutualInformation(searchTerm, s);
             if(mutual < .30) {
-                sortedMatches.put(s, mutual);
+                matches.put(s, mutual);
             }
         }
 
-        return sortedMatches.descendingKeySet().toArray(new String[sortedMatches.size()]);
+        return new ArrayList<>(sortByComparator(matches).keySet());
     }
 
+
+    /**
+     * Takes in the matches found from mutual information and then sorts them based on the information left over
+     * @param unsortedMap - HashMap from bestMatches
+     * @return - sorted HashMap
+     */
+    private static Map<String, Double> sortByComparator(Map<String, Double> unsortedMap) {
+        List<Map.Entry<String, Double>> list = new LinkedList<>(unsortedMap.entrySet());
+
+        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
+            @Override
+            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        });
+
+        Map<String, Double> sortedMap = new LinkedHashMap<>();
+
+        for (Map.Entry<String, Double> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedMap;
+    }
+
+    
     /**
      * This method takes in a single Searchable's searchable String and calculates the entropy of said string
      * using the Shannon definition for average information.
@@ -157,5 +183,6 @@ public class Main {
     private static double log(double proportion) {
         return Math.log(proportion) / Math.log(2.0);
     }
+
 
 }
