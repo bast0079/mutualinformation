@@ -6,23 +6,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String searchTerm = "Steve Bastin";
+        String searchTerm = "Steve";
 
         ArrayList<String> names = new ArrayList<>();
-        names.add("Steve Bastin");
-        names.add("Richard Banasiak");
-        names.add("Kenton Watson");
-        names.add("Steve Johnson");
-        names.add("Theo Kanning");
-        names.add("Joe Rider");
-        names.add("Patrick Fuentes");
-        names.add("Jeff Huston");
-        names.add("Jayd Saucedo");
-        names.add("Steve Barton");
-        names.add("Stephen Hopper");
-        names.add("Stevie Bastin");
-        names.add("Steve Bustin");
-        names.add("Steve Backin");
+        names.add("Jill");
+        names.add("Steve");
 
 
         double searchEntropy = entropy(searchTerm);
@@ -30,8 +18,10 @@ public class Main {
         for(int i = 0; i < names.size(); i++) {
             double conditional = conditionalEntropy(searchTerm, names.get(i));
             double information = mutualInformation(searchTerm, names.get(i));
+            double yield = (searchEntropy - information) / searchEntropy;
             System.out.println(names.get(i) + "  - Conditional Entropy: " + conditional);
-            System.out.println("Mutual Information: " + information + "\n");
+            System.out.println("Mutual Information: " + information);
+            System.out.println("Yield: " + yield + "\n");
 
         }
 
@@ -45,9 +35,11 @@ public class Main {
     public static List<String> bestMatches(String searchTerm, List<String> searchables) {
        HashMap<String, Double> matches = new HashMap<>();
 
+        double searchEntropy = entropy(searchTerm);
         for (String s : searchables) {
             double mutual = mutualInformation(searchTerm, s);
-            if(mutual < .50) {
+            double yield = (searchEntropy - mutual) / searchEntropy;
+            if(yield > .75) {
                 matches.put(s, mutual);
             }
         }
